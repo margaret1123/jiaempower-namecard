@@ -184,38 +184,36 @@
         .section-in { animation: scaleIn 0.5s ease-out forwards; }
         @keyframes scaleIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
 
-        /* 移动端适配优化 */
+        /* 移动端适配优化 - 彻底移除强制高度限制 */
         @media (max-width: 768px) {
             body {
-                /* 允许小屏幕滚动，防止内容被截断 */
-                height: auto;
+                /* 允许页面滚动 */
+                height: auto !important;
                 min-height: 100vh;
-                overflow-y: auto;
-                padding: 10px 0;
+                overflow-y: auto !important;
+                display: block !important; /* 取消 flex 居中，防止被挤出屏幕 */
+                padding: 20px 0;
             }
             
             .bg-blur {
-                position: fixed; /* 背景保持固定 */
+                position: fixed;
             }
 
             .main-capsule {
-                /* 移动端利用更多屏幕空间 */
-                width: 96%;
-                height: 92vh; 
-                /* 使用 dvh (动态视口) 如果浏览器支持，避免地址栏跳动 */
-                height: 92dvh; 
-                max-height: 900px;
-                /* 保证中间内容不被挤压的最小高度 */
-                min-height: 600px; 
+                /* 移除固定高度，改为自适应 */
+                width: 94%;
+                height: auto !important; 
+                min-height: 85vh; 
+                margin: 0 auto; /* 水平居中 */
+                overflow: visible !important; /* 允许内容撑开 */
             }
 
             .view-port {
-                /* 强制中间卡片区域的最小高度 */
-                min-height: 380px; 
+                min-height: 400px; /* 保证卡片有足够高度 */
             }
             
-            /* 调整卡片内边距，节省空间 */
             .big-card {
+                height: 400px; /* 给卡片一个明确的高度基准 */
                 padding: 20px;
             }
         }
