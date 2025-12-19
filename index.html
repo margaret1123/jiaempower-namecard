@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>嘉能新途 JIAEMPOWER PATHWAYS - 国际职教流程方案</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+
+        :root {
+            --glass: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 255, 255, 0.15);
+            --gold: #D4AF37;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #000;
+            color: #FFF;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* 动态液态背景 */
+        .bg-blur {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: radial-gradient(circle at 10% 20%, #1e1b4b 0%, transparent 45%),
+                        radial-gradient(circle at 90% 80%, #312e81 0%, transparent 45%),
+                        radial-gradient(circle at 50% 50%, #050505 0%, #000 100%);
+            filter: blur(80px);
+            animation: bgAnim 20s infinite alternate ease-in-out;
+        }
+        @keyframes bgAnim { from { transform: scale(1); } to { transform: scale(1.15); } }
+
+        /* 主胶囊容器 - 82% 屏幕高度 */
+        .main-capsule {
+            background: var(--glass);
+            backdrop-filter: blur(50px);
+            -webkit-backdrop-filter: blur(50px);
+            border: 1px solid var(--border);
+            border-radius: 52px;
+            width: 94%;
+            max-width: 410px;
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 50px 150px rgba(0,0,0,1);
+            overflow: hidden;
+        }
+
+        .gold-text {
+            background: linear-gradient(135deg, #FDE68A 0%, #D4AF37 50%, #B45309 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .serif { font-family: 'Noto Serif SC', serif; }
+
+        /* 顶部区域 */
+        header { padding: 32px 32px 10px 32px; flex-shrink: 0; }
+        nav { padding: 0 32px 12px 32px; flex-shrink: 0; }
+
+        /* 横向滑动视口 - 彻底去滚动条 */
+        .view-port {
+            flex: 1;
+            display: flex;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            padding: 0 20px;
+            gap: 16px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            align-items: center;
+        }
+        .view-port::-webkit-scrollbar { display: none; }
+
+        /* 卡片基础设计 */
+        .big-card {
+            flex: 0 0 90%;
+            scroll-snap-align: center;
+            border-radius: 40px;
+            padding: 28px;
+            height: 94%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: transform 0.3s;
+        }
+
+        /* 渐变修饰 */
+        .grad-amber { background: linear-gradient(180deg, rgba(245,158,11,0.08) 0%, rgba(0,0,0,0) 100%); border-top: 2px solid rgba(245,158,11,0.3); }
+        .grad-purple { background: linear-gradient(180deg, rgba(147,51,234,0.08) 0%, rgba(0,0,0,0) 100%); border-top: 2px solid rgba(147,51,234,0.3); }
+        .grad-blue { background: linear-gradient(180deg, rgba(59,130,246,0.08) 0%, rgba(0,0,0,0) 100%); border-top: 2px solid rgba(59,130,246,0.3); }
+        .grad-green { background: linear-gradient(180deg, rgba(16,185,129,0.08) 0%, rgba(0,0,0,0) 100%); border-top: 2px solid rgba(16,185,129,0.3); }
+
+        /* 底部固定区域 */
+        .footer-dock {
+            padding: 12px 32px 28px 32px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(30px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        /* 交互组件 */
+        .nav-tab.active {
+            color: #FFF;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 800;
+        }
+        .nav-tab { color: rgba(255, 255, 255, 0.3); transition: all 0.3s; font-size: 14px; letter-spacing: 0.1em; }
+        
+        .active-dot {
+            width: 24px; height: 3px; background: var(--gold);
+            border-radius: 2px; margin: 4px auto 0;
+            box-shadow: 0 0 12px var(--gold);
+        }
+
+        /* 底部主按钮 - 极致显眼 */
+        .btn-main {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 100%);
+            color: #000;
+            border-radius: 24px; 
+            font-size: 18px; 
+            font-weight: 900;
+            padding: 16px 0; 
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+            border: 1px solid #FFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 官网链接按钮 - 增加可见性 */
+        .btn-web {
+            background: rgba(255, 255, 255, 0.08);
+            color: #FFF;
+            border-radius: 20px;
+            font-size: 13px; 
+            font-weight: 600; 
+            padding: 12px 0;
+            width: 100%;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Logo 容器 - 确保完整显示 */
+        .logo-frame {
+            width: 100%;
+            flex: 0 0 40%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #FFF;
+            border-radius: 28px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.05), 0 10px 30px rgba(0,0,0,0.4);
+        }
+        .logo-frame img { width: 100%; height: 100%; object-fit: contain; }
+
+        .section-in { animation: scaleIn 0.5s ease-out forwards; }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <div class="bg-blur"></div>
+
+    <div class="main-capsule">
+        
+        <!-- Header -->
+        <header>
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h1 class="text-2xl font-bold gold-text tracking-wide">嘉能新途</h1>
+                    <p class="text-[10px] tracking-[0.4em] text-white/40 uppercase font-black">JIAEMPOWER PATHWAYS</p>
+                </div>
+                <div class="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
+                    <i class="fas fa-crown text-gold text-xl"></i>
+                </div>
+            </div>
+            <h2 class="text-[32px] leading-tight serif font-bold text-white tracking-tight">
+                职教赋能 <span class="gold-text">国际化</span> 全线解决方案
+            </h2>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="flex space-x-2">
+            <button onclick="switchTab('auth')" id="tab-auth" class="nav-tab active flex-1 py-3 rounded-2xl">
+                权威认证
+                <div class="active-dot" id="ind-auth"></div>
+            </button>
+            <button onclick="switchTab('product')" id="tab-product" class="nav-tab flex-1 py-3 rounded-2xl">
+                多维赋能
+                <div class="active-dot hidden" id="ind-product"></div>
+            </button>
+            <button onclick="switchTab('value')" id="tab-value" class="nav-tab flex-1 py-3 rounded-2xl">
+                国际接轨
+                <div class="active-dot hidden" id="ind-value"></div>
+            </button>
+        </nav>
+
+        <!-- 内容侧滑视口 -->
+        <div id="content-container" class="view-port">
+            <!-- 初始：四大认证 -->
+            <div class="big-card section-in grad-amber">
+                <div class="logo-frame"><img src="Accre1didations.JPG" alt="Worldchefs"></div>
+                <h4 class="text-[18px] font-black text-white mb-2 uppercase tracking-widest">Worldchefs</h4>
+                <p class="text-[14px] text-white/60 leading-relaxed">全球最具权威标准。代表 110+ 国家行业的最高技术共识。</p>
+            </div>
+            <div class="big-card section-in grad-purple">
+                <div class="logo-frame"><img src="A2credidations.JPG" alt="ACF"></div>
+                <h4 class="text-[18px] font-black text-white mb-2 uppercase tracking-widest">ACF 认证</h4>
+                <p class="text-[14px] text-white/60 leading-relaxed">北美职业金标准。获全球星级酒店与米其林餐厅高度认可。</p>
+            </div>
+            <div class="big-card section-in grad-blue">
+                <div class="logo-frame"><img src="A2cre3didations.JPG" alt="City & Guilds"></div>
+                <h4 class="text-[18px] font-black text-white mb-2 uppercase tracking-widest">皇家认证</h4>
+                <p class="text-[14px] text-white/60 leading-relaxed">150年历史。数字徽章支持全球雇主即时在线验证。</p>
+            </div>
+            <div class="big-card section-in grad-green">
+                <div class="logo-frame"><img src="Accredidations.JPG" alt="CPD"></div>
+                <h4 class="text-[18px] font-black text-white mb-2 uppercase tracking-widest">CPD 认证</h4>
+                <p class="text-[14px] text-white/60 leading-relaxed">国际持续专业发展学分体系。为教师职业晋升提供权威支撑。</p>
+            </div>
+        </div>
+
+        <!-- 底部固定区 -->
+        <footer class="footer-dock">
+            <button onclick="showContact()" class="btn-main">
+                <i class="fab fa-weixin mr-3 text-2xl"></i> 联系我们
+            </button>
+            <a href="https://www.jiaempower.nz" target="_blank" class="btn-web">
+                <i class="fas fa-globe mr-2"></i> 浏览官方网站了解更多
+            </a>
+        </footer>
+
+        <!-- 联系方式弹窗 -->
+        <div id="contact-modal" class="fixed inset-0 z-[200] bg-black/98 backdrop-blur-3xl hidden flex items-center justify-center p-8" onclick="hideContact()">
+            <div class="big-card w-full max-w-[320px] text-center border-white/20 h-auto py-10 grad-purple">
+                <div class="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/10">
+                    <i class="fab fa-weixin text-4xl text-green-400"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2 serif">战略合作咨询</h3>
+                <p class="text-[14px] text-white/40 mb-8">嘉能新途 </p>
+                
+                <div class="w-48 h-48 bg-white rounded-2xl mx-auto flex items-center justify-center mb-8 shadow-2xl overflow-hidden">
+                    <img src="6a0c6781aecc49218ef987ad989fe5a3.png" alt="WeChat QR Code" class="w-full h-full object-cover">
+                </div>
+                <button onclick="hideContact()" class="text-white/30 font-bold uppercase tracking-widest text-xs">返回名片</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const contentData = {
+            auth: `
+                <div class="big-card section-in grad-amber">
+                    <div class="logo-frame"><img src="Accre1didations.JPG"></div>
+                    <h4 class="text-[18px] font-black text-white mb-2 uppercase tracking-widest">Worldchefs</h4>
+                    <p class="text-[14px] text-white/60 leading-relaxed">全球权威标准。代表 110+ 国家行业的高技术共识。</p>
+                </div>
+                <div class="big-card section-in grad-purple">
+                    <div class="logo-frame"><img src="A2credidations.JPG"></div>
+                    <h4 class="text-[18px] font-black text-white mb-2 uppercase tracking-widest">ACF 认证</h4>
+                    <p class="text-[14px] text-white/60 leading-relaxed">北美职业金标准。获全球星级酒店与米其林餐厅高度认可。</p>
+                </div>
+                <div class="big-card section-in grad-blue">
+                    <div class="logo-frame"><img src="A2cre3didations.JPG"></div>
+                    <h4 class="text-[18px] font-black text-white mb-2 uppercase tracking-widest">皇家认证</h4>
+                    <p class="text-[14px] text-white/60 leading-relaxed">150年历史。数字徽章支持全球雇主即时在线验证。</p>
+                </div>
+                <div class="big-card section-in grad-green">
+                    <div class="logo-frame"><img src="Accredidations.JPG"></div>
+                    <h4 class="text-[18px] font-black text-white mb-2 uppercase tracking-widest">CPD 认证</h4>
+                    <p class="text-[14px] text-white/60 leading-relaxed">国际持续专业发展学分体系。为师生教师职业晋升背书。</p>
+                </div>
+            `,
+            product: `
+                <div class="big-card section-in grad-amber">
+                    <div class="logo-frame bg-transparent shadow-none"><i class="fas fa-graduation-cap text-6xl text-gold"></i></div>
+                    <h4 class="text-[22px] font-bold text-white mb-2 gold-text">国际标准课程</h4>
+                    <p class="text-[14px] text-white/70 leading-relaxed">模块化体系、缺哪补哪、核心模块。打造实战型人才。</p>
+                </div>
+                <div class="big-card section-in grad-purple">
+                    <div class="logo-frame bg-transparent shadow-none"><i class="fas fa-user-check text-6xl text-purple-400"></i></div>
+                    <h4 class="text-[22px] font-bold text-white mb-2">RPL 经验认证</h4>
+                    <p class="text-[14px] text-white/70 leading-relaxed">承认既往贡献，快速获取国际头衔。专为多年经验量身定制。</p>
+                </div>
+            `,
+            value: `
+                <div class="big-card section-in grad-blue">
+                    <div class="logo-frame bg-transparent shadow-none"><i class="fas fa-language text-6xl text-blue-400"></i></div>
+                    <h4 class="text-[20px] font-bold text-white mb-2">师生共赢</h4>
+                    <p class="text-[14px] text-white/70 leading-relaxed">教师：从多年经验导师进阶国际名师：学生：边学边练，厨艺英语两不误，迅速融入国际化流程</p>
+                </div>
+                <div class="big-card section-in grad-green">
+                    <div class="logo-frame bg-transparent shadow-none"><i class="fas fa-chart-line text-6xl text-green-400"></i></div>
+                    <h4 class="text-[20px] font-bold text-white mb-2">全球影响力</h4>
+                    <p class="text-[14px] text-white/70 leading-relaxed">链接全球 50+ 国家，赋能 10,000+ 学员。提升院校国际化评价指标。</p>
+                </div>
+            `
+        };
+
+        function switchTab(id) {
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('text-white/30');
+            });
+            document.querySelectorAll('.active-dot').forEach(ind => ind.classList.add('hidden'));
+            
+            const activeBtn = document.getElementById('tab-' + id);
+            activeBtn.classList.add('active');
+            activeBtn.classList.remove('text-white/30');
+            document.getElementById('ind-' + id).classList.remove('hidden');
+
+            const container = document.getElementById('content-container');
+            container.innerHTML = contentData[id];
+            container.scrollLeft = 0;
+        }
+
+        function showContact() { document.getElementById('contact-modal').classList.remove('hidden'); }
+        function hideContact() { document.getElementById('contact-modal').classList.add('hidden'); }
+    </script>
+</body>
+</html>
